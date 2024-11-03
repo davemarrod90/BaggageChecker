@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baggage Checker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Baggage Size Checker</h1>
+  <form id="baggage-form">
+    <label for="length">Length (cm):</label>
+    <input type="number" id="length" required>
+    <label for="width">Width (cm):</label>
+    <input type="number" id="width" required>
+    <label for="height">Height (cm):</label>
+    <input type="number" id="height" required>
+    <button type="button" onclick="checkBaggage()">Check</button>
+  </form>
+  <p id="result"></p>
+
+  <script src="functions.js"></script>
+</body>
+</html>

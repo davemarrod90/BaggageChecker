@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baggage Compatibility Checker</title>
+    <style>
+        /* Background styling */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            color: #333;
+        }
+
+        /* Form container */
+        form {
+            margin: 20px auto;
+            padding: 20px;
+            width: 300px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Input fields */
+        label, input {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Button styling */
+        button {
+            margin-top: 15px;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Grid layout for results */
+        #result {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        /* Result item styling */
+        .result-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #ffffff;
+            border-radius: 6px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-item img {
+            width: 80px; /* Adjust the logo size here */
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .result-item span {
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Baggage Compatibility Checker</h1>
+    <form id="baggage-form">
+        <label for="length">Length (cm):</label>
+        <input type="number" id="length" required>
+
+        <label for="width">Width (cm):</label>
+        <input type="number" id="width" required>
+
+        <label for="height">Height (cm):</label>
+        <input type="number" id="height" required>
+
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" required>
+
+        <button type="button" onclick="checkBaggage()">Check</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        // Sample baggage policy dataset with logos
+        const airlines = [
+            { airline: "American Airlines", type: "Carry-On", maxDimensions: [56, 36, 23], maxWeight: null, logo: "https://logo.clearbit.com/aa.com" },
+            { airline: "American Airlines", type: "Checked", maxDimensions: [158], maxWeight: 23, logo: "https://logo.clearbit.com/aa.com" },
+            { airline: "Delta Airlines", type: "Carry-On", maxDimensions: [56, 35, 23], maxWeight: null, logo: "https://logo.clearbit.com/delta.com" },
+            { airline: "Delta Airlines", type: "Checked", maxDimensions: [158], maxWeight: 23, logo: "https://logo.clearbit.com/delta.com" },
+            { airline: "United Airlines", type: "Carry-On", maxDimensions: [56, 35, 22], maxWeight: null, logo: "https://logo.clearbit.com/united.com" },
+            { airline: "United Airlines", type: "Checked", maxDimensions: [158], maxWeight: 23, logo: "https://logo.clearbit.com/united.com" },
+            { airline: "Emirates", type: "Carry-On", maxDimensions: [56, 35, 22], maxWeight: null, logo: "https://logo.clearbit.com/emirates.com" },
+            { airline: "Spirit", type: "Carry-On", maxDimensions: [56, 35, 22], maxWeight: null, logo: "https://logo.clearbit.com/spirit.com" },
+            { airline: "Swiss", type: "Carry-On", maxDimensions: [56, 35, 22], maxWeight: null, logo: "https://logo.clearbit.com/swiss.com" },
+            { airline: "Alitalia", type: "Carry-On", maxDimensions: [56, 35, 22], maxWeight: null, logo: "https://logo.clearbit.com/alitalia.com" },
+            { airline: "British Airways", type: "Carry-On", maxDimensions: [56, 35, 22], maxWeight: null, logo: "https://logo.clearbit.com/britishairways.com" },
+            { airline: "KLM", type: "Carry-On", maxDimensions: [56, 35, 22], maxWeight: null, logo: "https://logo.clearbit.com/klm.com" },
+            { airline: "Hawaiian Airlines", type: "Carry-On", maxDimensions: [56, 35, 22], maxWeight: null, logo: "https://logo.clearbit.com/hawaiianairlines.com" },
+            { airline: "Iberia", type: "Carry-On", maxDimensions: [56, 35, 22], maxWeight: null, logo: "https://logo.clearbit.com/iberia.com" },
+            { airline: "Southwest", type: "Carry-On", maxDimensions: [56, 35, 22], maxWeight: null, logo: "https://logo.clearbit.com/southwest.com" },
+            { airline: "Frontier", type: "Carry-On", maxDimensions: [56, 35, 22], maxWeight: null, logo: "https://logo.clearbit.com/frontier.com" },
+            { airline: "LATAM", type: "Carry-On", maxDimensions: [56, 35, 22], maxWeight: null, logo: "https://logo.clearbit.com/latam.com" },
+        ];
+
+        function checkBaggage() {
+            const length = parseFloat(document.getElementById("length").value);
+            const width = parseFloat(document.getElementById("width").value);
+            const height = parseFloat(document.getElementById("height").value);
+            const weight = parseFloat(document.getElementById("weight").value);
+
+            const linearDimension = length + width + height;
+
+            // Filter airlines that match the criteria
+            const matchingAirlines = airlines.filter(airline => {
+                const [maxL, maxW, maxH] = airline.maxDimensions;
+                const maxLinear = airline.maxDimensions[0];
+
+                const dimensionCheck = maxL && maxW && maxH
+                    ? length <= maxL && width <= maxW && height <= maxH
+                    : linearDimension <= maxLinear;
+
+                const weightCheck = airline.maxWeight ? weight <= airline.maxWeight : true;
+
+                return dimensionCheck && weightCheck;
+            });
+
+            // Display results with logos
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = ""; // Clear previous results
+            if (matchingAirlines.length > 0) {
+                matchingAirlines.forEach(a => {
+                    const resultItem = document.createElement("div");
+                    resultItem.className = "result-item";
+                    
+                    const logo = document.createElement("img");
+                    logo.src = a.logo;
+                    logo.alt = `${a.airline} logo`;
+                    
+                    const text = document.createElement("span");
+                    text.innerText = `${a.airline} (${a.type})`;
+                    
+                    resultItem.appendChild(logo);
+                    resultItem.appendChild(text);
+                    
+                    resultDiv.appendChild(resultItem);
+                });
+            } else {
+                resultDiv.innerText = "No compatible airlines found for the entered baggage dimensions.";
+            }
+        }
+    </script>
+
+</body>
+</html>

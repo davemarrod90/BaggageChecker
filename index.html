@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baggage Compatibility Checker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Baggage Compatibility Checker</h1>
+    
+        <div class="layout">
+            <!-- Left Section for Carry-On and Checked Buttons -->
+            <div class="left-section">
+                <div class="button-container">
+                    <button class="baggage-button" onclick="showReference('carry-on')">
+                        <img src="https://img.icons8.com/?size=100&id=5aX8oCoSaJtA&format=png&color=000000" alt="Carry-On Icon"> Carry-On
+                    </button>
+                    <button class="baggage-button" onclick="showReference('checked')">
+                        <img src="https://img.icons8.com/?size=100&id=sN4tTtgqf9c7&format=png&color=000000" alt="Checked Baggage Icon"> Checked Baggage
+                    </button>
+                </div>
+            </div>
+    
+            <!-- Center Section for Form -->
+            <div class="center-section">
+                <form id="baggage-form">
+                    <label for="length">Length:</label>
+                    <input type="number" id="length" required>
+    
+                    <label for="width">Width:</label>
+                    <input type="number" id="width" required>
+    
+                    <label for="height">Height:</label>
+                    <input type="number" id="height" required>
+    
+                    <label for="weight">Weight:</label>
+                    <input type="number" id="weight" required>
+    
+                    <label for="unit">Unit:</label>
+                    <select id="unit">
+                        <option value="cm">Centimeters (cm)</option>
+                        <option value="inches">Inches (in)</option>
+                    </select>
+    
+                    <button type="button" onclick="checkBaggage()">Check</button>
+                </form>
+            </div>
+        </div>
+    
+        <!-- Bottom Section for Results -->
+        <div id="result" class="result-container"></div>
+        <div id="reference" class="reference-section">Select a baggage type to view reference measurements.</div>
+
+    </div>
+    
+
+
+    <!-- JavaScript Files -->
+    <script src="referenceDisplay.js"></script>
+    <script src="baggageChecker.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
