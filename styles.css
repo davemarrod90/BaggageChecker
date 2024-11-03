@@ -2,7 +2,7 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    background: linear-gradient(135deg, #f0f4f8, #d9e4f5);
+    background: url(https://images.unsplash.com/photo-1466691623998-d607fab1ca29?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D) no-repeat center center fixed;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,7 +13,7 @@ body {
 .container {
     width: 90%;
     max-width: 1200px;
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.9); /* Adds a white background with opacity */
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 20px;
